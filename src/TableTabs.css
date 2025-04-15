@@ -1,0 +1,390 @@
+.table-tabs-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: transparent;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  width: 100%;
+}
+
+.tabs-header {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  background-color: rgba(45, 45, 45, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  height: 40px;
+  min-height: 40px;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.tabs-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #555 #2d2d2d;
+  padding: 0 4px;
+  height: 100%;
+  align-items: center;
+}
+
+.tabs-container::-webkit-scrollbar {
+  height: 3px;
+}
+
+.tabs-container::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 3px;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 0 12px;
+  margin: 0;
+  background-color: rgba(61, 61, 61, 0.95);
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+  transition: all 0.2s ease;
+}
+
+.tab-item:not(:first-child) {
+  margin-left: -6px;
+}
+
+.tab-item:hover {
+  background-color: rgba(77, 77, 77, 0.95);
+  border-color: rgba(255, 255, 255, 0.2);
+  z-index: 1;
+}
+
+.tab-item.active {
+  background-color: var(--surface-dark);
+  border-color: rgba(255, 255, 255, 0.2);
+  z-index: 2;
+}
+
+.tab-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: 8px;
+}
+
+.tab-checkbox {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.tab-button {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  letter-spacing: 0.3px;
+}
+
+.tab-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tab-item:hover .tab-actions {
+  opacity: 1;
+}
+
+.tab-rename-btn,
+.tab-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 14px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.tab-rename-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tab-delete-btn:hover {
+  color: #ff4444;
+  background-color: rgba(255, 68, 68, 0.1);
+}
+
+.tab-rename-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.tab-rename-input {
+  width: 100%;
+  min-width: 60px;
+  height: 24px;
+  padding: 0 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.tab-rename-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.tab-rename-save,
+.tab-rename-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  font-size: 12px;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.tab-rename-save:hover {
+  color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.tab-rename-cancel:hover {
+  color: #ff5252;
+  background-color: rgba(255, 82, 82, 0.1);
+}
+
+.tables-content {
+  flex: 1;
+  overflow: hidden;
+  padding: 15px;
+  background-color: #1e1e1e;
+  width: 100%;
+}
+
+.table-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  overflow: hidden;
+  width: 100%;
+  height: calc(100% - 40px);
+}
+
+.table-title {
+  padding: 10px 15px;
+  background-color: #3d3d3d;
+  color: #e0e0e0;
+  font-weight: 600;
+  border-bottom: 1px solid #444;
+}
+
+.table-wrapper {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  background-color: var(--surface-dark);
+}
+
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+.table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.5;
+  table-layout: auto;
+  background-color: transparent;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  background-color: rgba(61, 61, 61, 0.95);
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+  z-index: 1;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(10px);
+}
+
+.table td {
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 32px;
+  background-color: var(--surface-dark);
+  border-radius: var(--radius-lg);
+}
+
+.empty-state p {
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 400px;
+  letter-spacing: 0.3px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .tables-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .table-container {
+    margin-bottom: 0;
+  }
+}
+
+/* Remove upload area styles since we're removing that feature */
+.upload-area,
+.upload-area.dragging,
+.file-input,
+.upload-label,
+.upload-icon {
+  display: none;
+}
+
+.manual-table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.manual-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: inherit;
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+.manual-input:focus {
+  outline: none;
+  border-color: #1a73e8;
+}
+
+.add-row-button {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-row-button:hover {
+  background-color: #0d62c9;
+}
+
+.upload-section {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.upload-section h2 {
+  color: #e0e0e0;
+  margin-bottom: 10px;
+}
+
+.upload-section p {
+  color: #aaa;
+  margin-bottom: 20px;
+} 

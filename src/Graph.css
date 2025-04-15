@@ -1,0 +1,149 @@
+.graph-container {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.graph-container p {
+  color: var(--text-color);
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.graph-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.graph-tabs {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--secondary-background);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.graph-tab {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.graph-tab:hover {
+  background-color: var(--hover-color);
+}
+
+.graph-tab.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.graph-canvas-container {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--secondary-background);
+}
+
+.graph-canvas-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.graph-canvas-container::-webkit-scrollbar-track {
+  background: var(--secondary-background);
+}
+
+.graph-canvas-container::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 4px;
+}
+
+.graph-canvas {
+  display: block;
+  width: 100%;
+  background-color: var(--background-color);
+}
+
+/* Draggable Legend Styles */
+.graph-legend {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 150px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  user-select: none;
+  z-index: 10;
+}
+
+.legend-header {
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.legend-name {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .graph-container {
+    min-height: 300px;
+    padding: 15px;
+  }
+  
+  .graph-container p {
+    font-size: 1rem;
+    padding: 0 15px;
+  }
+} 
