@@ -8,7 +8,7 @@
 
 RoBoard uses a combination of a table and graph to visualize student code. The table shows the raw data, including the code that each student entered and the recorded timestamps for button presses, and the graph shows the time it took for each student to complete the code along with a comparison to the ideal code (if applicable).
 
-<h2>How do I use RoBoard?</h2>
+<h2>How do I start using RoBoard?</h2>
 
 To use RoBoard, you need to upload CSV files from each Roversa robot's micro:bit. You can do so by:
 
@@ -21,3 +21,5 @@ To use RoBoard, you need to upload CSV files from each Roversa robot's micro:bit
 4. Downloading the file (as a .csv file)
 
 5. Uploading the .csv file to RoBoard
+
+6. You can now access all of our tools! If you're unsure of know how to utilize the dashboard, refer to our tutorial feature.
