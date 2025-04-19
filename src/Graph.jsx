@@ -26,7 +26,7 @@ const styles = {
 function Graph({ tables, selectedTables, idealCode }) {
   const canvasRef = useRef(null);
   const legendRef = useRef(null);
-  const [activeTab, setActiveTab] = useState('time'); // 'time', 'score', or 'match'
+  const [activeTab, setActiveTab] = useState('score'); // Default to 'score' instead of 'time'
   const [scrollPosition, setScrollPosition] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
@@ -35,6 +35,28 @@ function Graph({ tables, selectedTables, idealCode }) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [legendData, setLegendData] = useState([]);
+  const [graphStats, setGraphStats] = useState({
+    time: { 
+      avgTime: 0, 
+      maxTime: 0, 
+      minTime: 0, 
+      totalRuns: 0,
+      tableStats: [] // Add table-specific stats
+    },
+    score: { 
+      avgScore: 0, 
+      maxScore: 0, 
+      minScore: 0, 
+      totalRuns: 0,
+      tableStats: [] // Add table-specific stats
+    },
+    match: { 
+      matchCount: 0, 
+      totalTables: 0, 
+      matchPercentage: 0,
+      tableStats: [] // Add table-specific stats
+    }
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -399,6 +421,49 @@ function Graph({ tables, selectedTables, idealCode }) {
     });
     
     setLegendData(legendItems);
+    
+    // Calculate statistics for the time graph
+    if (allPlayTimes.length > 0) {
+      const times = allPlayTimes.map(dp => dp.timeDiff);
+      const avgTime = times.reduce((sum, time) => sum + time, 0) / times.length;
+      const maxTime = Math.max(...times);
+      const minTime = Math.min(...times);
+      
+      // Calculate table-specific statistics
+      const tableStats = [];
+      selectedTables.forEach((tableIndex, colorIndex) => {
+        const table = tables[tableIndex];
+        const tableTimes = allPlayTimes
+          .filter(dp => dp.tableName === table.title)
+          .map(dp => dp.timeDiff);
+        
+        if (tableTimes.length > 0) {
+          const tableAvgTime = tableTimes.reduce((sum, time) => sum + time, 0) / tableTimes.length;
+          const tableMaxTime = Math.max(...tableTimes);
+          const tableMinTime = Math.min(...tableTimes);
+          
+          tableStats.push({
+            tableName: table.title,
+            avgTime: tableAvgTime.toFixed(2),
+            maxTime: tableMaxTime.toFixed(2),
+            minTime: tableMinTime.toFixed(2),
+            totalRuns: tableTimes.length,
+            color: styles.tableColors[colorIndex % styles.tableColors.length]
+          });
+        }
+      });
+      
+      setGraphStats(prev => ({
+        ...prev,
+        time: {
+          avgTime: avgTime.toFixed(2),
+          maxTime: maxTime.toFixed(2),
+          minTime: minTime.toFixed(2),
+          totalRuns: times.length,
+          tableStats
+        }
+      }));
+    }
   };
 
   const drawScoreGraph = (ctx, width, height, scrollPos) => {
@@ -627,6 +692,49 @@ function Graph({ tables, selectedTables, idealCode }) {
     });
     
     setLegendData(legendItems);
+    
+    // Calculate statistics for the score graph
+    if (allScores.length > 0) {
+      const scores = allScores.map(dp => dp.score);
+      const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      const maxScore = Math.max(...scores);
+      const minScore = Math.min(...scores);
+      
+      // Calculate table-specific statistics
+      const tableStats = [];
+      selectedTables.forEach((tableIndex, colorIndex) => {
+        const table = tables[tableIndex];
+        const tableScores = allScores
+          .filter(dp => dp.tableName === table.title)
+          .map(dp => dp.score);
+        
+        if (tableScores.length > 0) {
+          const tableAvgScore = tableScores.reduce((sum, score) => sum + score, 0) / tableScores.length;
+          const tableMaxScore = Math.max(...tableScores);
+          const tableMinScore = Math.min(...tableScores);
+          
+          tableStats.push({
+            tableName: table.title,
+            avgScore: tableAvgScore.toFixed(2),
+            maxScore: tableMaxScore.toFixed(2),
+            minScore: tableMinScore.toFixed(2),
+            totalRuns: tableScores.length,
+            color: styles.tableColors[colorIndex % styles.tableColors.length]
+          });
+        }
+      });
+      
+      setGraphStats(prev => ({
+        ...prev,
+        score: {
+          avgScore: avgScore.toFixed(2),
+          maxScore: maxScore.toFixed(2),
+          minScore: minScore.toFixed(2),
+          totalRuns: scores.length,
+          tableStats
+        }
+      }));
+    }
   };
 
   const calculateSimilarityScore = (studentCode, idealCode) => {
@@ -854,6 +962,31 @@ function Graph({ tables, selectedTables, idealCode }) {
     });
     
     setLegendData(legendItems);
+    
+    // Calculate statistics for the match graph
+    if (matchData.length > 0) {
+      const matchCount = matchData.filter(data => data.matchRun !== null).length;
+      const totalTables = matchData.length;
+      const matchPercentage = (matchCount / totalTables) * 100;
+      
+      // Calculate table-specific statistics
+      const tableStats = matchData.map(data => ({
+        tableName: data.tableName,
+        hasMatch: data.matchRun !== null,
+        matchRun: data.matchRun,
+        color: data.color
+      }));
+      
+      setGraphStats(prev => ({
+        ...prev,
+        match: {
+          matchCount,
+          totalTables,
+          matchPercentage: matchPercentage.toFixed(1),
+          tableStats
+        }
+      }));
+    }
   };
 
   // Helper function to check if two arrays are equal
@@ -869,12 +1002,6 @@ function Graph({ tables, selectedTables, idealCode }) {
     <div className="graph-wrapper">
       <div className="graph-tabs">
         <button 
-          className={`graph-tab ${activeTab === 'time' ? 'active' : ''}`}
-          onClick={() => setActiveTab('time')}
-        >
-          Time Between Runs
-        </button>
-        <button 
           className={`graph-tab ${activeTab === 'score' ? 'active' : ''}`}
           onClick={() => setActiveTab('score')}
         >
@@ -885,6 +1012,12 @@ function Graph({ tables, selectedTables, idealCode }) {
           onClick={() => setActiveTab('match')}
         >
           Successful Runs
+        </button>
+        <button 
+          className={`graph-tab ${activeTab === 'time' ? 'active' : ''}`}
+          onClick={() => setActiveTab('time')}
+        >
+          Time Between Runs
         </button>
       </div>
       <div 
@@ -906,7 +1039,8 @@ function Graph({ tables, selectedTables, idealCode }) {
         />
         {legendData.length > 0 && activeTab !== 'match' && 
          !(activeTab === 'score' && !idealCode) && 
-         !(activeTab === 'match' && !idealCode) && (
+         !(activeTab === 'match' && !idealCode) && 
+         selectedTables.length > 0 && (
           <div 
             ref={legendRef}
             className="graph-legend"
@@ -928,6 +1062,163 @@ function Graph({ tables, selectedTables, idealCode }) {
                     style={{ backgroundColor: item.color }}
                   ></div>
                   <div className="legend-name">{item.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Graph Statistics Section */}
+      <div className="graph-statistics">
+        {activeTab === 'time' && (
+          <div className="stats-container">
+            <h3>Time Between Runs Statistics</h3>
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-label">Average Time</div>
+                <div className="stat-value">{graphStats.time.avgTime} seconds</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Maximum Time</div>
+                <div className="stat-value">{graphStats.time.maxTime} seconds</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Minimum Time</div>
+                <div className="stat-value">{graphStats.time.minTime} seconds</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Total Runs</div>
+                <div className="stat-value">{graphStats.time.totalRuns}</div>
+              </div>
+            </div>
+            <p className="stats-description">
+              This graph shows the time difference between consecutive runs for each student. 
+              Lower times indicate faster completion between runs, suggesting improved understanding and knowledge of the task's concepts.
+            </p>
+            
+            {/* Table-specific statistics */}
+            <h4 className="table-stats-header">Individual Table Statistics</h4>
+            <div className="table-stats-container">
+              {graphStats.time.tableStats.map((table, index) => (
+                <div key={index} className="table-stat-item" style={{ borderLeft: `3px solid ${table.color}` }}>
+                  <h5 className="table-name">{table.tableName}</h5>
+                  <div className="table-stat-grid">
+                    <div className="table-stat">
+                      <span className="table-stat-label">Average Time:</span>
+                      <span className="table-stat-value">{table.avgTime} seconds</span>
+                    </div>
+                    <div className="table-stat">
+                      <span className="table-stat-label">Maximum Time:</span>
+                      <span className="table-stat-value">{table.maxTime} seconds</span>
+                    </div>
+                    <div className="table-stat">
+                      <span className="table-stat-label">Minimum Time:</span>
+                      <span className="table-stat-value">{table.minTime} seconds</span>
+                    </div>
+                    <div className="table-stat">
+                      <span className="table-stat-label">Total Runs:</span>
+                      <span className="table-stat-value">{table.totalRuns}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {activeTab === 'score' && (
+          <div className="stats-container">
+            <h3>Compare to Ideal Code Statistics</h3>
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-label">Average Score</div>
+                <div className="stat-value">{graphStats.score.avgScore}%</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Maximum Score</div>
+                <div className="stat-value">{graphStats.score.maxScore}%</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Minimum Score</div>
+                <div className="stat-value">{graphStats.score.minScore}%</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Total Runs</div>
+                <div className="stat-value">{graphStats.score.totalRuns}</div>
+              </div>
+            </div>
+            <p className="stats-description">
+              This graph compares each student's code to the ideal code. 
+              The score represents how closely their code matches the ideal solution, with 100% representing a perfect solution.
+            </p>
+            
+            {/* Table-specific statistics */}
+            <h4 className="table-stats-header">Individual Table Statistics</h4>
+            <div className="table-stats-container">
+              {graphStats.score.tableStats.map((table, index) => (
+                <div key={index} className="table-stat-item" style={{ borderLeft: `3px solid ${table.color}` }}>
+                  <h5 className="table-name">{table.tableName}</h5>
+                  <div className="table-stat-grid">
+                    <div className="table-stat">
+                      <span className="table-stat-label">Average Score:</span>
+                      <span className="table-stat-value">{table.avgScore}%</span>
+                    </div>
+                    <div className="table-stat">
+                      <span className="table-stat-label">Maximum Score:</span>
+                      <span className="table-stat-value">{table.maxScore}%</span>
+                    </div>
+                    <div className="table-stat">
+                      <span className="table-stat-label">Minimum Score:</span>
+                      <span className="table-stat-value">{table.minScore}%</span>
+                    </div>
+                    <div className="table-stat">
+                      <span className="table-stat-label">Total Runs:</span>
+                      <span className="table-stat-value">{table.totalRuns}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {activeTab === 'match' && (
+          <div className="stats-container">
+            <h3>Successful Runs Statistics</h3>
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-label">Students with Match</div>
+                <div className="stat-value">{graphStats.match.matchCount} of {graphStats.match.totalTables}</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Match Percentage</div>
+                <div className="stat-value">{graphStats.match.matchPercentage}%</div>
+              </div>
+            </div>
+            <p className="stats-description">
+              This graph shows which students successfully matched the ideal code at least once.
+              A successful run occurs when a student's code exactly matches the ideal code in a run.
+            </p>
+            
+            {/* Table-specific statistics */}
+            <h4 className="table-stats-header">Individual Table Statistics</h4>
+            <div className="table-stats-container">
+              {graphStats.match.tableStats.map((table, index) => (
+                <div key={index} className="table-stat-item" style={{ borderLeft: `3px solid ${table.color}` }}>
+                  <h5 className="table-name">{table.tableName}</h5>
+                  <div className="table-stat-grid">
+                    <div className="table-stat">
+                      <span className="table-stat-label">Status:</span>
+                      <span className="table-stat-value">
+                        {table.hasMatch ? (
+                          <span className="match-success">Match found in Run {table.matchRun}</span>
+                        ) : (
+                          <span className="match-failure">No match found</span>
+                        )}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

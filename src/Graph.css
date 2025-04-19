@@ -25,47 +25,103 @@
 .graph-wrapper {
   display: flex;
   flex-direction: column;
-  width: 100%;
   height: 100%;
-  background-color: var(--background-color);
+  width: 100%;
+  background-color: var(--background);
   border-radius: 8px;
   overflow: hidden;
+  max-height: 80vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) rgba(30, 41, 59, 0.3);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  max-height: 80vh;
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  padding-top: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .graph-tabs {
   display: flex;
   gap: 10px;
-  padding: 10px;
-  background-color: var(--secondary-background);
+  margin-bottom: 20px;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--surface-dark);
   border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.graph-tab {
+.graph-tabs button {
   padding: 8px 16px;
-  background-color: transparent;
-  border: none;
-  border-radius: 4px;
-  color: var(--text-color);
+  background-color: rgba(15, 23, 42, 0.5);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 120px;
+  text-align: center;
 }
 
-.graph-tab:hover {
-  background-color: var(--hover-color);
+.graph-tabs button:hover {
+  background-color: rgba(15, 23, 42, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.graph-tab.active {
+.graph-tabs button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.graph-tabs button.active {
   background-color: var(--primary-color);
   color: white;
+  border-color: var(--primary-color);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 150, 190, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(37, 150, 190, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 150, 190, 0);
+  }
 }
 
 .graph-canvas-container {
-  position: relative;
   flex: 1;
-  overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--secondary-background);
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+  max-height: none;
+  position: relative;
+  width: 100%;
+  transition: all 0.3s ease;
 }
 
 .graph-canvas-container::-webkit-scrollbar {
@@ -146,4 +202,185 @@
     font-size: 1rem;
     padding: 0 15px;
   }
+}
+
+/* Graph Statistics Styles */
+.graph-statistics {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: rgba(15, 23, 42, 0.5);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stats-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.5s;
+}
+
+.stats-container h3 {
+  color: var(--text-color);
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.6s;
+}
+
+.stat-item {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.stats-description {
+  color: var(--text-color);
+  opacity: 0.9;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba(15, 23, 42, 0.3);
+  border-radius: 6px;
+  border-left: 3px solid var(--primary);
+}
+
+.graph-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.graph-wrapper::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+}
+
+.graph-wrapper::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 4px;
+}
+
+/* Table-specific statistics styles */
+.table-stats-header {
+  color: var(--text-color);
+  margin: 20px 0 15px;
+  font-size: 16px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.table-stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.7s;
+}
+
+.table-stat-item {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.table-stat-item:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.table-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+  transition: color 0.3s ease;
+}
+
+.table-stat-item:hover .table-name {
+  color: var(--secondary-color);
+}
+
+.table-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.table-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.table-stat-label {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.table-stat-value {
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.match-success {
+  color: #10b981; /* Green color for success */
+}
+
+.match-failure {
+  color: #ef4444; /* Red color for failure */
 } 

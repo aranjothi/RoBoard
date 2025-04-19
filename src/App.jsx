@@ -94,14 +94,16 @@ function App() {
           </div>
           <div className="graph-section">
             <div className="graph-container">
-              {tables.length > 0 && selectedTables.length > 0 ? (
+              {tables.length > 0 ? (
                 <Graph 
                   tables={tables} 
                   selectedTables={selectedTables} 
                   idealCode={idealCode}
                 />
               ) : (
-                <p>Once your file has uploaded, select data from the table tabs to graph and visualize.</p>
+                <div className="no-data-message">
+                  <p>Upload a CSV file to see graphs</p>
+                </div>
               )}
             </div>
           </div>
@@ -122,6 +124,17 @@ function App() {
             <p className="popup-example">
               Example: reverse right right forward left
             </p>
+            
+            {/* Current Ideal Code Display */}
+            {idealCode && (
+              <div className="current-ideal-code">
+                <h3>Current Ideal Code:</h3>
+                <div className="code-display">
+                  {idealCode}
+                </div>
+              </div>
+            )}
+            
             <input
               type="text"
               value={codeInput}

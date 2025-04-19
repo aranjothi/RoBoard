@@ -137,7 +137,7 @@ html, body, #root {
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.3px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
@@ -161,8 +161,8 @@ html, body, #root {
 
 .upload-button:hover {
   background-color: var(--secondary-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .upload-button:hover::before {
@@ -171,7 +171,7 @@ html, body, #root {
 
 .upload-button:active {
   transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .app-content {
@@ -363,11 +363,16 @@ html, body, #root {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .code-button:hover {
   background-color: #3a3a3a;
+}
+
+.code-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .popup-overlay {
@@ -381,6 +386,26 @@ html, body, #root {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 .popup-content {
@@ -390,6 +415,21 @@ html, body, #root {
   width: 90%;
   max-width: 500px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideIn 0.3s ease forwards;
+  animation-delay: 0.1s;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .popup-content h2 {
@@ -402,6 +442,9 @@ html, body, #root {
   color: #cccccc;
   margin: 0 0 12px 0;
   font-size: 14px;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: 0.15s;
 }
 
 .popup-example {
@@ -409,6 +452,9 @@ html, body, #root {
   margin: 0 0 16px 0;
   font-size: 14px;
   font-style: italic;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: 0.15s;
 }
 
 .code-input {
@@ -420,23 +466,30 @@ html, body, #root {
   color: white;
   font-size: 14px;
   margin-bottom: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .code-input:focus {
   outline: none;
   border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(37, 150, 190, 0.2);
 }
 
 .error-message {
   color: #ef4444;
   margin: 0 0 16px 0;
   font-size: 14px;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .popup-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: 0.3s;
 }
 
 .cancel-button {
@@ -447,11 +500,16 @@ html, body, #root {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .cancel-button:hover {
   background-color: #444444;
+}
+
+.cancel-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .submit-button {
@@ -462,11 +520,16 @@ html, body, #root {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .submit-button:hover {
   background-color: var(--secondary-hover);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .faq-button {
@@ -477,12 +540,17 @@ html, body, #root {
   padding: 8px 16px;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   margin-left: auto;
 }
 
 .faq-button:hover {
   background-color: #3a3a3a;
+}
+
+.faq-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .faq-popup {
@@ -506,4 +574,65 @@ html, body, #root {
   color: var(--text-color);
   margin-bottom: 15px;
   line-height: 1.5;
+}
+
+/* Current Ideal Code Display Styles */
+.current-ideal-code {
+  margin: 15px 0;
+  padding: 12px;
+  background-color: rgba(15, 23, 42, 0.5);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s ease forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.current-ideal-code h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.code-display {
+  font-family: 'Chakra Petch', monospace;
+  font-size: 16px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary-color);
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+/* Add hover effects to buttons */
+.upload-button:hover,
+.code-button:hover,
+.faq-button:hover,
+.cancel-button:hover,
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.upload-button:active,
+.code-button:active,
+.faq-button:active,
+.cancel-button:active,
+.submit-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
