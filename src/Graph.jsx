@@ -230,7 +230,7 @@ function Graph({ tables, selectedTables, idealCode }) {
       ctx.fillStyle = styles.textColor;
       ctx.font = `14px ${styles.font}`;
       ctx.textAlign = 'center';
-      ctx.fillText('No recorded runs (plays) found in the selected tables.', width / 2, height / 2);
+      ctx.fillText('At least two runs are required to calculate time between runs.', width / 2, height / 2);
       return;
     }
     
@@ -763,7 +763,7 @@ function Graph({ tables, selectedTables, idealCode }) {
       ctx.fillStyle = styles.textColor;
       ctx.font = `14px ${styles.font}`;
       ctx.textAlign = 'center';
-      ctx.fillText('Please submit an ideal code to see matching runs.', width / 2, height / 2);
+      ctx.fillText('Please submit an ideal code to see successful runs.', width / 2, height / 2);
       return;
     }
 
